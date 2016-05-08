@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+  <style>
+  .bars{
+    width: 40em;
+  }
+  </style>
+</head>
+<body>
+<h1>Exmaple</h1>
+<ul>
+  <li><a id="data-a" href="#">lalalala</a></li>
+  <li><a id="data-b" href="#">lolololo</a></li>
+</ul>
+
+<!-- THE GENERIC DIV -->
+<div class="bars"></div>
+
+<!-- d3, a damn hard dependency -->
+<script src="d3.min.js"></script>
+<!-- the crappy plugin -->
+<script src="gf-bars.js"></script>
+
+<!-- the example -->
+<script>
+  var fake_data = [
+    {
+      id    : "pan",
+      party : "pan",
+      val   : 20,
+      color : "blue",
+      stamp : "[sepa qué dice aquí ]"
+    },
+    {
+      id    : "pri",
+      party : "pri",
+      val   : 10,
+      color : "red",
+      stamp : "[sepa qué dice aquí ]"
+    },
+    {
+      id    : "participacion",
+      party : "participacion",
+      val   : 60,
+      color : "green",
+      stamp : "[sepa qué dice aquí ]"
+    }
+  ],
+  fake_data_2 = [
+    {
+      id    : "pan",
+      party : "pan",
+      val   : 100,
+      color : "blue",
+      stamp : "[sepa qué dice aquí ]"
+    },
+    {
+      id    : "pri",
+      party : "pri",
+      val   : 15,
+      color : "red",
+      stamp : "[sepa qué dice aquí ]"
+    },
+    {
+      id    : "convergencia",
+      party : "convergencia",
+      val   : 30,
+      color : "purple",
+      stamp : "[sepa qué dice aquí ]"
+    },
+    {
+      id    : "participacion",
+      party : "participacion",
+      val   : 40,
+      color : "green",
+      stamp : "[sepa qué dice aquí ]"
+    }
+  ],
+  buttonA = document.getElementById("data-a"),
+  buttonB = document.getElementById("data-b"),
+  div     = document.querySelectorAll(".bars")[0],
+  graph   = new GFBars(div, fake_data); 
+
+  buttonB.addEventListener("click", function(e){
+    e.preventDefault();
+    graph.update(fake_data_2);
+  });
+
+  buttonA.addEventListener("click", function(e){
+    e.preventDefault();
+    graph.update(fake_data);
+  });
+</script>
+</body>
+</html>
