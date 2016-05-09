@@ -10,7 +10,7 @@
   //
   //
   var style = {
-    defaultHeight : 500,
+    defaultHeight : 300,
     maxValue      : 70,
     firstHour : 8,
     lastHour : 20,
@@ -43,8 +43,9 @@
   //
   makeYScale = function(){
     var y = d3.scale.linear()
-              .domain([0, syle.maxValue])
+              .domain([0, style.maxValue])
               .range([style.defaultHeight - style.margins.bottom, style.margins.top ]);
+    this.yScale = y;
   },
 
   //
@@ -55,6 +56,21 @@
      x = d3.time.scale()
             .domain(this.timeExtent)
             .range([Margins.left, Margins.width - Margins.left - Margins.right]);
+  },
+
+  setYaxis = function(){
+    var yAxis = d3.svg.axis()
+                  .scale(this.yScale)
+                  .orient("left")
+                  .ticks( Math.ceil(style.maxValue/10));
+      
+    this._yAxis = yAxis;
+    this.yAxis  = this.svg.append("g")
+                      .attr("class", "y-axis")
+                      .attr("transform", "translate(" + style.margins.left + ",0)")
+                      .call(this._yAxis);
+
+    this.yAxis.selectAll("line").attr("x2", "90%")
   },
 
   //
@@ -84,6 +100,8 @@
     // create the container
     this.makeSVG();
     this.makeTimeExtent();
+    this.makeYScale();
+    this.setYaxis();
   },
 
   //
@@ -100,6 +118,7 @@
       makeYScale     : makeYScale,
       makeXScale     : makeXScale,
       makeTimeExtent : makeTimeExtent,
+      setYaxis       : setYaxis,
       update         : update
     };
 
