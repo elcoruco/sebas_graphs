@@ -7,7 +7,7 @@
     width: 40em;
   }
 
-  /* THIS STYLES ARE PART OF THE LINES GRAPH; AND MUST BE IMPLEMENTED THERE, BUT... */
+  /* THIS STYLES ARE PART OF THE LINES GRAPH; AND THEY MUST BE IMPLEMENTED THERE, BUT... */
   .y-axis path{
     display: none;
   }
@@ -18,7 +18,7 @@
     shape-rendering: crispEdges;
   }
 
-  .y-axis text {
+  .y-axis text, .x-axis-label {
     font-family: sans-serif;
     font-size: 11px;
   }
@@ -135,7 +135,7 @@
   fake_data_3[1] = [   // time 0, some parties 
     [
       {party: "pan", value : 0, color : "blue", time : time0}, 
-      {party: "pri", value : 0, color : "red", time : time0}, 
+      {party: "pri", value : 70, color : "red", time : time0}, 
     ]
   ];
   fake_data_3[2] = [   // time 1, some parties and some results

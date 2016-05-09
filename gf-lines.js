@@ -18,8 +18,19 @@
       top    : 10,
       right  : 10,
       bottom : 20,
-      left   : 20
+      left   : 30
     }
+  },
+
+  _uniq = function(coll){
+    var clean = [];
+    coll.forEach(function(d){
+      if(clean.indexOf(d) === -1){
+        clean.push(d);
+      }
+    });
+
+    return clean;
   },
 
   //
@@ -53,11 +64,55 @@
   //
   //
   makeXScale = function(){
-     x = d3.time.scale()
-            .domain(this.timeExtent)
-            .range([Margins.left, Margins.width - Margins.left - Margins.right]);
+    if(!this.data.length){
+      this.xScale = null;
+      return;
+    }
+    var x = d3.scale.ordinal()
+            .domain(this._timeExtent)
+            .rangePoints([10, 90]);
+    this.xScale = x;
   },
 
+  //
+  //
+  //
+  //
+  setXaxis = function(){
+
+    if(!this.xScale){
+      this._xAxis = null;
+      this.xAxis  = null;
+      return;
+    }
+
+    var that  = this,
+        xAxis = this.svg.selectAll(".x-axis-label").data(this._timeExtent);
+    
+    xAxis.transition().attr("x", function(d){
+      return that.xScale(d) + "%";
+    });
+
+    xAxis.enter()
+      .append("text")
+        .attr("text-anchor", "middle")
+        .attr("class", "x-axis-label")
+        .attr("fill", "black")
+        .attr("y", style.defaultHeight)
+        .attr("x", function(d){
+          return that.xScale(d) + "%";
+        })
+        .text(function(d){
+          return d;
+        });
+
+    xAxis.exit().remove();
+  },
+
+  //
+  //
+  //
+  //
   setYaxis = function(){
     var yAxis = d3.svg.axis()
                   .scale(this.yScale)
@@ -77,7 +132,47 @@
   //
   //
   //
+  makeTicks = function(){
+    var that  = this,
+        ticks = this.svg.selectAll(".line-point").data(this.data);
+
+    ticks.transition().attr("x", function(d){
+      return that.xScale(d.timeLabel) + "%";
+    })
+    .attr("y", function(d){
+      return that.yScale(d.value);
+    });
+
+    ticks.enter()
+      .append("rect")
+        .attr("class", "line-point")
+        .attr("width", 4)
+        .attr("height", 4)
+        .attr("fill", function(d){
+          return d.color;
+        })
+        .attr("x", function(d){
+          return that.xScale(d.timeLabel) + "%";
+        })
+        .attr("y", function(d){
+          return that.yScale(d.value);
+        });
+
+    ticks.exit().remove();
+  },
+  //
+  //
+  //
+  //
   makeTimeExtent = function(){
+    var values = this.data.map(function(d){
+      var minutes = d.time.getMinutes();
+      d.timeLabel = d.time.getHours() + ":" + (minutes  < 10? "0".concat(minutes) : minutes);
+      return d.timeLabel;
+    });
+
+    this._timeExtent = _uniq(values);
+
     this.timeExtent = d3.extent(this.data, function(d){
       return d.time;
     });
@@ -90,6 +185,9 @@
   update = function(data){
     this.data = d3.merge(data);
     this.makeTimeExtent();
+    this.makeXScale();
+    this.setXaxis();
+    this.makeTicks();
   },
 
   //
@@ -102,6 +200,9 @@
     this.makeTimeExtent();
     this.makeYScale();
     this.setYaxis();
+    this.makeXScale();
+    this.setXaxis();
+    this.makeTicks();
   },
 
   //
@@ -119,6 +220,8 @@
       makeXScale     : makeXScale,
       makeTimeExtent : makeTimeExtent,
       setYaxis       : setYaxis,
+      setXaxis       : setXaxis,
+      makeTicks      : makeTicks,
       update         : update
     };
 
