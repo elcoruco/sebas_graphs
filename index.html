@@ -3,13 +3,15 @@
 <head>
 	<title></title>
   <style>
-  .bars{
+  .bars, .lines{
     width: 40em;
   }
   </style>
 </head>
 <body>
-<h1>Exmaple</h1>
+<h1>Exmaples</h1>
+
+<h2>Bars A</h2>
 <ul>
   <li><a id="data-a" href="#">lalalala</a></li>
   <li><a id="data-b" href="#">lolololo</a></li>
@@ -17,6 +19,16 @@
 
 <!-- THE GENERIC DIV -->
 <div class="bars"></div>
+
+<h2>Lines A</h2>
+<ul>
+  <li><a id="time-0" href="#">inicio</a></li>
+  <li><a id="time-1" href="#">corte 1</a></li>
+  <li><a id="time-2" href="#">corte 2</a></li>
+  <li><a id="time-3" href="#">corte 3</a></li>
+  <li><a id="time-4" href="#">corte 4</a></li>
+</ul>
+<div class="lines"></div>
 
 <!-- d3, a damn hard dependency -->
 <script src="d3.min.js"></script>
@@ -92,6 +104,101 @@
     e.preventDefault();
     graph.update(fake_data);
   });
+</script>
+
+<!-- the crappy plugin 2 -->
+<script src="gf-lines.js"></script>
+<!-- THE second example -->
+<script>
+  var time0 = new Date(2016, 2, 12, 8, 0, 0, 0);
+  var time1 = new Date(2016, 2, 12, 10, 0, 0, 0);
+  var time2 = new Date(2016, 2, 12, 12, 0, 0, 0);
+  var time3 = new Date(2016, 2, 12, 18, 0, 0, 0);
+  var fake_data_3 = [];
+  fake_data_3[0] = []; // time 0
+  fake_data_3[1] = [   // time 0, some parties 
+    [
+      {party: "pan", value : 0, color : "blue", time : time0}, 
+      {party: "pri", value : 0, color : "red", time : time0}, 
+    ]
+  ];
+  fake_data_3[2] = [   // time 1, some parties and some results
+    [
+      {party: "pan", value : 0, color : "blue", time : time0}, 
+      {party: "pri", value : 0, color : "red", time : time0}, 
+    ],
+    [
+      {party: "pan", value : 12, color : "blue", time : time1}, 
+      {party: "pri", value : 30, color : "red", time : time1}, 
+    ],
+  ];
+
+  fake_data_3[3] = [   // time 1, some parties and some results
+    [
+      {party: "pan", value : 0, color : "blue", time : time0}, 
+      {party: "pri", value : 0, color : "red", time : time0}, 
+    ],
+    [
+      {party: "pan", value : 12, color : "blue", time : time1}, 
+      {party: "pri", value : 30, color : "red", time : time1}, 
+    ],
+    [
+      {party: "pan", value : 40, color : "blue", time : time2}, 
+      {party: "pri", value : 10, color : "red", time : time2}, 
+    ],
+  ];
+  fake_data_3[4] = [   // time 1, some parties and some results
+    [
+      {party: "pan", value : 0, color : "blue", time : time0}, 
+      {party: "pri", value : 0, color : "red", time : time0}, 
+    ],
+    [
+      {party: "pan", value : 12, color : "blue", time : time1}, 
+      {party: "pri", value : 30, color : "red", time : time1}, 
+    ],
+    [
+      {party: "pan", value : 40, color : "blue", time : time2}, 
+      {party: "pri", value : 10, color : "red", time : time2}, 
+    ],
+    [
+      {party: "pan", value : 30, color : "blue", time : time3}, 
+      {party: "pri", value : 15, color : "red", time : time3}, 
+    ],
+  ];
+
+  buttonC = document.getElementById("time-0"),
+  buttonD = document.getElementById("time-1"),
+  buttonE = document.getElementById("time-2"),
+  buttonF = document.getElementById("time-3"),
+  buttonG = document.getElementById("time-4"),
+  div2    = document.querySelectorAll(".lines")[0],
+  graph2  = new GFLines(div2, fake_data_3[0]); 
+
+  buttonC.addEventListener("click", function(e){
+    e.preventDefault();
+    graph2.update(fake_data_3[0]);
+  });
+
+  buttonD.addEventListener("click", function(e){
+    e.preventDefault();
+    graph2.update(fake_data_3[1]);
+  });
+
+  buttonE.addEventListener("click", function(e){
+    e.preventDefault();
+    graph2.update(fake_data_3[2]);
+  });
+
+  buttonF.addEventListener("click", function(e){
+    e.preventDefault();
+    graph2.update(fake_data_3[3]);
+  });
+
+  buttonG.addEventListener("click", function(e){
+    e.preventDefault();
+    graph2.update(fake_data_3[4]);
+  });
+
 </script>
 </body>
 </html>
