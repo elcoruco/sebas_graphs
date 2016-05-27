@@ -51,6 +51,7 @@
   //
   //
   var setSVGHeight = function(){
+    console.log(this);
     this.svg.attr("height", this.data.length * (style.barsA.height + (style.barsA.margin * 2)) );
   };
 
@@ -199,28 +200,72 @@
   };
 
   //
+  //
+  //
+  //
+  var cleanData = function(d){
+    if(d.result){
+      var response = d.result.map(function(item){
+        return {
+          id    : "mx" + item.id_resultado,
+          party : item.etiqueta,
+          val   : +item.punto_estimado,
+          color : item.color, 
+          stamp : item.descripcion,
+          pos   : item.orden
+        }
+      });
+      response.sort(function(a,b){
+        return +a.pos - +b.pos;
+      });
+
+      return response;
+    }
+    else{
+      return [];
+    }
+  };
+
+  //
   // [ UPDATE DATA ]
   //
   //
   var update = function(data){
-    this.data = data;
-    this.makeRects();
-    this.addLabels();
-    this.setSVGHeight();
-    this.addValues();
-    this.addLabelsB();
-    this.makeLines();
+    // si recibe los datos listos para usarse
+    if(Array.isArray(data)){
+      this.data = data;
+      this.makeRects();
+      this.addLabels();
+      this.setSVGHeight();
+      this.addValues();
+      this.addLabelsB();
+      this.makeLines();
+    }
+    else{
+      // si recibe un url desde el que debe obtener los datos
+      var that = this;
+      d3.json(data, function(error, d){
+        var _data = that.cleanData(d);
+        that.data = _data;
+        that.makeRects();
+        that.addLabels();
+        that.setSVGHeight();
+        that.addValues();
+        that.addLabelsB();
+        that.makeLines();
+      });
+    }
   };
 
   //
   // [ THE PLUGIN CONSTRUCTOR ]
   //
   // 
-  var _constructor = function(el, data){
+  var _constructor = function(el, url){
     // [1] define the object
     var bars = {
       el           : el,
-      data         : data,
+      data         : [],
       makeSVG      : makeSVG, 
       makeRects    : makeRects,
       addLabels    : addLabels,
@@ -229,23 +274,31 @@
       setSVGHeight : setSVGHeight,
       addLabelsB   : addLabelsB,
       makeLines    : makeLines,
+      cleanData    : cleanData,
       initialize   : function(){
-        // create the container
-        this.makeSVG();
+        var that = this;
+        d3.json(url, function(error, d){
+          // prepare the response
+          var _data = that.cleanData(d);
+          //that.data = _data;
 
-        // append the first line
-        this.svg.append("line")
-         .attr("stroke", "grey")
-         .attr("stroke-width", 1)
-         .attr("x1", function(d){
-           return style.barsA.left + "%";
-         })
-         .attr("x2", "100%")
-         .attr("y1", style.barsA.margin / 2)
-         .attr("y2", style.barsA.margin / 2);
+          // create the container
+          that.makeSVG();
 
-        // make it happen
-        this.update(data);
+          // append the first line
+          that.svg.append("line")
+           .attr("stroke", "grey")
+           .attr("stroke-width", 1)
+           .attr("x1", function(d){
+             return style.barsA.left + "%";
+           })
+           .attr("x2", "100%")
+           .attr("y1", style.barsA.margin / 2)
+           .attr("y2", style.barsA.margin / 2);
+
+          // make it happen
+          that.update(_data);
+        });
       }
     };
 

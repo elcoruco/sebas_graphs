@@ -109,16 +109,16 @@
   buttonA = document.getElementById("data-a"),
   buttonB = document.getElementById("data-b"),
   div     = document.querySelectorAll(".bars")[0],
-  graph   = new GFBars(div, fake_data); 
+  graph   = new GFBars(div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP"); 
 
   buttonB.addEventListener("click", function(e){
     e.preventDefault();
-    graph.update(fake_data_2);
+    graph.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/19_ESTATAL_R%20GOBERNADOR/PAN%20grande/EP");
   });
 
   buttonA.addEventListener("click", function(e){
     e.preventDefault();
-    graph.update(fake_data);
+    graph.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP");
   });
 </script>
 
