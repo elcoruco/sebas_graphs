@@ -1,6 +1,6 @@
 // 
 // app : CRAPPY PLUGIN v1
-// description : draw some bars
+// description : draw some bars with other style
 // author : @elcoruco
 // url : http://gobiernofacil.com
 //
@@ -18,14 +18,15 @@
   //
   var style =  {
         barsA : {
-          height : 30, // the height of the bar in px
-          margin : 15, // the top and bottom bar margin
-          left   : 27, // the left margin, in %
-          right  : 2,  // the right margin, in %
-          width  : 40, // the bar width, in %
-          min    : 1,  // the min bar width, in %
-          xlabel : 75, // the position of the right text, in %
-          labelSize : "10em" // the space for the labels
+          height     : 30, // the height of the bar in px
+          margin     : 15, // the top and bottom bar margin
+          left       : 27, // the left margin, in %
+          right      : 2,  // the right margin, in %
+          width      : 70, // the bar width, in %
+          min        : .1,  // the min bar width, in %
+          xlabel     : 75, // the position of the right text, in %
+          labelSize  : "10em", // the space for the labels
+          labelClass : "label" // the class for the party names
         }
       },
       // the scale for the bar width
@@ -90,28 +91,26 @@
   };
 
   //
-  // [ MAKE LINES ]
+  // [ MAKE VERTICAL GUIDES ]
   //
   //
-  var makeLines = function(){
-    this.lines = this.svg.selectAll(".divisor");
-
-    var d = this.lines.data(this.data);
+  var makeVerticalGuides = function(){
+    this.verticalGuides = this.svg.selectAll(".verticalGuide");
+    var points = scaleX.ticks();
+    var d = this.verticalGuides.data(points);
     d.enter()
       .append("line")
-      .attr("class", "divisor")
+      .attr("class", "verticalGuide")
       .attr("stroke", "grey")
       .attr("stroke-width", 1)
       .attr("x1", function(d){
-        return style.barsA.left + "%";
+        return (style.barsA.left + scaleX(d)) + "%";
       })
-      .attr("x2", "100%")
-      .attr("y1", function(d, i){
-        return ((i+1) * (style.barsA.height + style.barsA.margin)) + (style.barsA.margin/2);
+      .attr("x2", function(d){
+        return (style.barsA.left + scaleX(d)) + "%";
       })
-      .attr("y2", function(d, i){
-        return ((i+1) * (style.barsA.height + style.barsA.margin)) + (style.barsA.margin/2);
-      });
+      .attr("y1", "0%")
+      .attr("y2", "100%");
   };
 
   //
@@ -132,7 +131,7 @@
         .attr("y", function(d, i){
           return (i * (style.barsA.height + style.barsA.margin)) + (style.barsA.height/2) + style.barsA.margin;
         })
-        .attr("class", "label")
+        .attr("class", style.barsA.labelClass)
         .attr("text-anchor", "end")
         .attr("alignment-baseline", "middle")
         .text(function(d){
@@ -235,12 +234,12 @@
     // si recibe los datos listos para usarse
     if(Array.isArray(data)){
       this.data = data;
+      this.makeVerticalGuides();
       this.makeRects();
       this.addLabels();
       this.setSVGHeight();
       this.addValues();
       this.addLabelsB();
-      this.makeLines();
     }
     else{
       // si recibe un url desde el que debe obtener los datos
@@ -248,12 +247,12 @@
       d3.json(data, function(error, d){
         var _data = that.cleanData(d);
         that.data = _data;
+        that.makeVerticalGuides();
         that.makeRects();
         that.addLabels();
         that.setSVGHeight();
         that.addValues();
         that.addLabelsB();
-        that.makeLines();
       });
     }
   };
@@ -274,8 +273,8 @@
       addValues    : addValues,
       setSVGHeight : setSVGHeight,
       addLabelsB   : addLabelsB,
-      makeLines    : makeLines,
       cleanData    : cleanData,
+      makeVerticalGuides : makeVerticalGuides,
       initialize   : function(){
         var that = this;
         d3.json(url, function(error, d){
@@ -285,17 +284,6 @@
 
           // create the container
           that.makeSVG();
-
-          // append the first line
-          that.svg.append("line")
-           .attr("stroke", "grey")
-           .attr("stroke-width", 1)
-           .attr("x1", function(d){
-             return style.barsA.left + "%";
-           })
-           .attr("x2", "100%")
-           .attr("y1", style.barsA.margin / 2)
-           .attr("y2", style.barsA.margin / 2);
 
           // make it happen
           that.update(_data);
