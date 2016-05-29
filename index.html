@@ -35,6 +35,7 @@
 
 <!-- THE GENERIC DIV -->
 <div class="bars"></div>
+<div class="bars"></div>
 
 <h2>Lines A</h2>
 <ul>
@@ -53,63 +54,12 @@
 
 <!-- the example -->
 <script>
-  var fake_data = [
-    {
-      id    : "pan",
-      party : "pan",
-      val   : 20,
-      color : "blue",
-      stamp : "[sepa qué dice aquí ]"
-    },
-    {
-      id    : "pri",
-      party : "pri",
-      val   : 10,
-      color : "red",
-      stamp : "[sepa qué dice aquí ]"
-    },
-    {
-      id    : "participacion",
-      party : "participacion",
-      val   : 60,
-      color : "green",
-      stamp : "[sepa qué dice aquí ]"
-    }
-  ],
-  fake_data_2 = [
-    {
-      id    : "pan",
-      party : "pan",
-      val   : 100,
-      color : "blue",
-      stamp : "[sepa qué dice aquí ]"
-    },
-    {
-      id    : "pri",
-      party : "pri",
-      val   : 15,
-      color : "red",
-      stamp : "[sepa qué dice aquí ]"
-    },
-    {
-      id    : "convergencia",
-      party : "convergencia",
-      val   : 30,
-      color : "purple",
-      stamp : "[sepa qué dice aquí ]"
-    },
-    {
-      id    : "participacion",
-      party : "participacion",
-      val   : 40,
-      color : "green",
-      stamp : "[sepa qué dice aquí ]"
-    }
-  ],
-  buttonA = document.getElementById("data-a"),
+  var buttonA = document.getElementById("data-a"),
   buttonB = document.getElementById("data-b"),
   div     = document.querySelectorAll(".bars")[0],
-  graph   = new GFBars(div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP"); 
+  _div     = document.querySelectorAll(".bars")[1],
+  graph  = new GFBars(div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP");
+  _graph = new GFBars(_div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/06_ESTATAL%20GOBERNADOR/Total/EP"); 
 
   buttonB.addEventListener("click", function(e){
     e.preventDefault();
