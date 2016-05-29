@@ -53,7 +53,6 @@
   //
   //
   var setSVGHeight = function(){
-    console.log(this);
     this.svg.attr("height", this.data.length * (style.barsA.height + (style.barsA.margin * 2)) );
   };
 
@@ -97,6 +96,7 @@
   var makeVerticalGuides = function(){
     this.verticalGuides = this.svg.selectAll(".verticalGuide");
     var points = scaleX.ticks();
+    var height = this.data.length * (style.barsA.height + (style.barsA.margin * 1.1));
     var d = this.verticalGuides.data(points);
     d.enter()
       .append("line")
@@ -109,8 +109,24 @@
       .attr("x2", function(d){
         return (style.barsA.left + scaleX(d)) + "%";
       })
-      .attr("y1", "0%")
-      .attr("y2", "100%");
+      .attr("y1", "0")
+      .attr("y2", height);
+
+    this.verticalGuidesLabels = this.svg.selectAll(".verticalGuideLabel");
+    var d = this.verticalGuidesLabels.data(points);
+
+    d.enter()
+      .append("text")
+        .attr("x", function(d){
+          return (style.barsA.left + scaleX(d)) + "%";
+        })
+        .attr("y", height + 10)
+        .attr("class", "verticalGuideLabel")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .text(function(d){
+          return d;
+        });
   };
 
   //
