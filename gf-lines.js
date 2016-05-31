@@ -19,7 +19,8 @@
       right  : 10,
       bottom : 20,
       left   : 30
-    }
+    },
+    tickSize : 6
   },
 
   _uniq = function(coll){
@@ -146,8 +147,8 @@
     ticks.enter()
       .append("rect")
         .attr("class", "line-point")
-        .attr("width", 4)
-        .attr("height", 4)
+        .attr("width", style.tickSize)
+        .attr("height", style.tickSize)
         .attr("fill", function(d){
           return d.color;
         })
@@ -156,10 +157,69 @@
         })
         .attr("y", function(d){
           return that.yScale(d.value);
-        });
+        })
+        .attr("transform", "translate(" + (-style.tickSize/2) + ", " + (-style.tickSize/2) + ")");
 
     ticks.exit().remove();
   },
+
+  makeLineGenerator = function(){
+    var that  = this,
+        width = this.svg.node().parentNode.offsetWidth,
+        line  = d3.svg.line()
+                 .x(function(d){
+                  return that.xScale(d.timeLabel)*.01*width;
+                 })
+                 .y(function(d){
+                  return that.yScale(d.value);
+                 });
+    this.lineGenerator = line;
+  },
+
+  drawLines = function(){
+    var that    = this,
+        _labels = [],
+        lines   = [],
+        _lines  = [],
+        labels  = this.data.map(function(d){
+          return d.party;
+        });
+
+    for(var i = 0; i < labels.length; i++){
+          if(_labels.indexOf(labels[i]) == -1) _labels.push(labels[i]);
+    }
+
+    _labels.forEach(function(label){
+          lines.push(this.data.filter(function(d){
+            return d.party == label;
+          }));
+    }, this);
+
+    var theLines = this.svg.selectAll(".line").data(lines);
+
+    theLines.transition()
+        .attr("d", function(d){
+          return that.lineGenerator(d);
+        })
+        .attr("stroke", function(d){
+          return d[0].color;
+        });
+
+    theLines.enter()
+      .append("path")
+        .attr("class", "line")
+        .attr("d", function(d){
+          return that.lineGenerator(d);
+        })
+        .attr("fill", "none")
+        .attr("stroke", function(d){
+          return d[0].color;
+        });
+
+    theLines.exit().remove();
+
+  },
+
   //
   //
   //
@@ -183,11 +243,13 @@
   //
   //
   update = function(data){
-    this.data = d3.merge(data);
+    this.data  = d3.merge(data);
+    this._data = data;
     this.makeTimeExtent();
     this.makeXScale();
     this.setXaxis();
     this.makeTicks();
+    this.drawLines();
   },
 
   //
@@ -203,6 +265,8 @@
     this.makeXScale();
     this.setXaxis();
     this.makeTicks();
+    this.makeLineGenerator();
+    this.drawLines();
   },
 
   //
@@ -214,6 +278,7 @@
     var lines = {
       el             : el,
       data           : d3.merge(data),
+      _data          : data,
       makeSVG        : makeSVG, 
       initialize     : initialize,
       makeYScale     : makeYScale,
@@ -222,7 +287,9 @@
       setYaxis       : setYaxis,
       setXaxis       : setXaxis,
       makeTicks      : makeTicks,
-      update         : update
+      update         : update,
+      drawLines      : drawLines,
+      makeLineGenerator : makeLineGenerator,
     };
 
     // [2] initialize the object
