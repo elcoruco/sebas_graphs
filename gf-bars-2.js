@@ -315,6 +315,6 @@
   };
 
   // add the plugin to the window element
-  win.GFBars = _constructor;
+  win.GFBars2 = _constructor;
 
 })(window, document);

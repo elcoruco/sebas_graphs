@@ -242,43 +242,77 @@
   //
   //
   //
-  update = function(data){
-    this.data  = d3.merge(data);
-    this._data = data;
-    this.makeTimeExtent();
-    this.makeXScale();
-    this.setXaxis();
-    this.makeTicks();
-    this.drawLines();
+  update = function(url){
+    var that = this;
+    d3.json(url, function(error, d){
+      var data   = _prepare_data(d);
+      that.data  = d3.merge(data);
+      that.makeTimeExtent();
+      that.makeXScale();
+      that.setXaxis();
+      that.makeTicks();
+      that.drawLines();
+    });
+  },
+
+  _make_time = function(str){
+    var date_time = str.split(" "),
+        date = date_time[0].split("-"),
+        time = date_time[1].split(":");
+
+    return new Date(+date[0], +date[1]-1, date[2], time[0], time[1], time[2]);//[date, time];
+  },
+
+  _prepare_data = function(d){
+    var response = d.result,
+          data   = response.map(function(collection){
+            var stamp   = collection.timestamp,
+                values  = collection.values,
+                objects = values.map(function(obj){
+                  return {
+                    party : obj.etiqueta,
+                    value : obj.punto_estimado,
+                    color : obj.color,
+                    time  : _make_time(stamp),
+                    _time : stamp
+                  };
+                });
+            return objects;
+          }, this);
+    return data;
   },
 
   //
   // [ INITIALIZE FUNCTION ]
   //
   //
-  initialize = function(){
-    // create the container
-    this.makeSVG();
-    this.makeTimeExtent();
-    this.makeYScale();
-    this.setYaxis();
-    this.makeXScale();
-    this.setXaxis();
-    this.makeTicks();
-    this.makeLineGenerator();
-    this.drawLines();
+  initialize = function(url){
+
+    var that = this;
+    d3.json(url, function(error, d){
+      var data  = _prepare_data(d);
+      that.data = d3.merge(data);
+      // create the container
+      that.makeSVG();
+      that.makeTimeExtent();
+      that.makeYScale();
+      that.setYaxis();
+      that.makeXScale();
+      that.setXaxis();
+      that.makeTicks();
+      that.makeLineGenerator();
+      that.drawLines();
+    });
   },
 
   //
   // [ THE PLUGIN CONSTRUCTOR ]
   //
   // 
-  _constructor = function(el, data){
+  _constructor = function(el, url){
     // [1] define the object
     var lines = {
       el             : el,
-      data           : d3.merge(data),
-      _data          : data,
       makeSVG        : makeSVG, 
       initialize     : initialize,
       makeYScale     : makeYScale,
@@ -293,7 +327,7 @@
     };
 
     // [2] initialize the object
-    lines.initialize();
+    lines.initialize(url);
 
     // [3] return the object n____n
     return lines;

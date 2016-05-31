@@ -50,6 +50,7 @@
 <!-- d3, a damn hard dependency -->
 <script src="d3.min.js"></script>
 <!-- the crappy plugin -->
+<script src="gf-bars.js"></script>
 <script src="gf-bars-2.js"></script>
 
 <!-- the example -->
@@ -58,8 +59,8 @@
   buttonB = document.getElementById("data-b"),
   div     = document.querySelectorAll(".bars")[0],
   _div     = document.querySelectorAll(".bars")[1],
-  graph  = new GFBars(div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP");
-  _graph = new GFBars(_div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/06_ESTATAL%20GOBERNADOR/Total/EP"); 
+  graph  = new GFBars2(div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP");
+  _graph = new GFBars2(_div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/06_ESTATAL%20GOBERNADOR/Total/EP"); 
 
   buttonB.addEventListener("click", function(e){
     e.preventDefault();
@@ -76,95 +77,38 @@
 <script src="gf-lines.js"></script>
 <!-- THE second example -->
 <script>
-  var time0 = new Date(2016, 2, 12, 8, 0, 0, 0);
-  var time1 = new Date(2016, 2, 12, 10, 0, 0, 0);
-  var time2 = new Date(2016, 2, 12, 12, 0, 0, 0);
-  var time3 = new Date(2016, 2, 12, 18, 0, 0, 0);
-  var fake_data_3 = [];
-  fake_data_3[0] = []; // time 0
-  fake_data_3[1] = [   // time 0, some parties 
-    [
-      {party: "pan", value : 0, color : "blue", time : time0}, 
-      {party: "pri", value : 70, color : "red", time : time0}, 
-    ]
-  ];
-  fake_data_3[2] = [   // time 1, some parties and some results
-    [
-      {party: "pan", value : 0, color : "blue", time : time0}, 
-      {party: "pri", value : 0, color : "red", time : time0}, 
-    ],
-    [
-      {party: "pan", value : 12, color : "blue", time : time1}, 
-      {party: "pri", value : 30, color : "red", time : time1}, 
-    ],
-  ];
-
-  fake_data_3[3] = [   // time 1, some parties and some results
-    [
-      {party: "pan", value : 0, color : "blue", time : time0}, 
-      {party: "pri", value : 0, color : "red", time : time0}, 
-    ],
-    [
-      {party: "pan", value : 12, color : "blue", time : time1}, 
-      {party: "pri", value : 30, color : "red", time : time1}, 
-    ],
-    [
-      {party: "pan", value : 40, color : "blue", time : time2}, 
-      {party: "pri", value : 10, color : "red", time : time2}, 
-    ],
-  ];
-  fake_data_3[4] = [   // time 1, some parties and some results
-    [
-      {party: "pan", value : 0, color : "blue", time : time0}, 
-      {party: "pri", value : 0, color : "red", time : time0}, 
-    ],
-    [
-      {party: "pan", value : 12, color : "blue", time : time1}, 
-      {party: "pri", value : 30, color : "red", time : time1}, 
-    ],
-    [
-      {party: "pan", value : 40, color : "blue", time : time2}, 
-      {party: "pri", value : 10, color : "red", time : time2}, 
-    ],
-    [
-      {party: "pan", value : 30, color : "blue", time : time3}, 
-      {party: "pri", value : 15, color : "red", time : time3}, 
-    ],
-  ];
-
   buttonC = document.getElementById("time-0"),
   buttonD = document.getElementById("time-1"),
   buttonE = document.getElementById("time-2"),
   buttonF = document.getElementById("time-3"),
   buttonG = document.getElementById("time-4"),
   div2    = document.querySelectorAll(".lines")[0],
-  graph2  = new GFLines(div2, fake_data_3[0]); 
+  graph2  = new GFLines(div2, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP"); 
 
   buttonC.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(fake_data_3[0]);
+    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
   });
 
   buttonD.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(fake_data_3[1]);
+    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
   });
 
   buttonE.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(fake_data_3[2]);
+    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
   });
 
   buttonF.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(fake_data_3[3]);
+    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
   });
 
   buttonG.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(fake_data_3[4]);
+    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
   });
-
 </script>
 </body>
 </html>
