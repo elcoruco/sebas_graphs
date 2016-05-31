@@ -24,6 +24,25 @@
     tooltip : "gf-tt-cont"
   },
 
+  // el código de _mergeObject es de:
+  // http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
+  _mergeObject = function(obj1, obj2) {
+    for (var p in obj2) {
+      try {
+        // Property in destination object set; update its value.
+        if ( obj2[p].constructor==Object ) {
+          obj1[p] = _mergeObject(obj1[p], obj2[p]);
+        } else {
+          obj1[p] = obj2[p];
+        }
+      } catch(e) {
+        // Property in destination object not set; create it and set its value.
+        obj1[p] = obj2[p];
+      }
+    }
+    return obj1;
+  },
+
   _showTooltip = function(title, content){
     var _container = document.createElement("div"),
         _title     = document.createElement("h3"),
@@ -322,9 +341,10 @@
   // [ INITIALIZE FUNCTION ]
   //
   //
-  initialize = function(url){
+  initialize = function(url, obj){
 
     var that = this;
+    style    = Object.create(_mergeObject(style, (obj || {})));
     d3.json(url, function(error, d){
       var data  = _prepare_data(d);
       that.data = d3.merge(data);
@@ -345,7 +365,7 @@
   // [ THE PLUGIN CONSTRUCTOR ]
   //
   // 
-  _constructor = function(el, url){
+  _constructor = function(el, url, obj){
     // [1] define the object
     var lines = {
       el             : el,
@@ -363,7 +383,7 @@
     };
 
     // [2] initialize the object
-    lines.initialize(url);
+    lines.initialize(url, obj);
 
     // [3] return the object n____n
     return lines;

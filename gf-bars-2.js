@@ -17,21 +17,38 @@
   //
   //
   var style =  {
-        barsA : {
-          height     : 30, // the height of the bar in px
-          margin     : 15, // the top and bottom bar margin
-          left       : 27, // the left margin, in %
-          right      : 2,  // the right margin, in %
-          width      : 70, // the bar width, in %
-          min        : .1,  // the min bar width, in %
-          xlabel     : 75, // the position of the right text, in %
-          labelSize  : "10em", // the space for the labels
-          labelClass : "label" // the class for the party names
-        },
-        tooltip : "gf-tt-cont" // the class for the tooltip
+        height     : 30, // the height of the bar in px
+        margin     : 15, // the top and bottom bar margin
+        left       : 27, // the left margin, in %
+        right      : 2,  // the right margin, in %
+        width      : 70, // the bar width, in %
+        min        : .1,  // the min bar width, in %
+        xlabel     : 75, // the position of the right text, in %
+        labelSize  : "10em", // the space for the labels
+        labelClass : "label", // the class for the party names
+        tooltip    : "gf-tt-cont" // the class for the tooltip
       },
       // the scale for the bar width
-      scaleX = d3.scale.linear().domain([0, 100]).range([style.barsA.min, style.barsA.width]);
+      scaleX = d3.scale.linear().domain([0, 100]).range([style.min, style.width]);
+
+  // el código de _mergeObject es de:
+  // http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
+  var _mergeObject = function(obj1, obj2) {
+    for (var p in obj2) {
+      try {
+        // Property in destination object set; update its value.
+        if ( obj2[p].constructor==Object ) {
+          obj1[p] = _mergeObject(obj1[p], obj2[p]);
+        } else {
+          obj1[p] = obj2[p];
+        }
+      } catch(e) {
+        // Property in destination object not set; create it and set its value.
+        obj1[p] = obj2[p];
+      }
+    }
+    return obj1;
+  };
 
   var _showTooltip = function(title, content){
     var _container = document.createElement("div"),
@@ -80,7 +97,7 @@
   //
   //
   var setSVGHeight = function(){
-    this.svg.attr("height", this.data.length * (style.barsA.height + (style.barsA.margin * 2)) );
+    this.svg.attr("height", this.data.length * (style.height + (style.margin * 2)) );
   };
 
   //
@@ -104,26 +121,28 @@
       .attr("width", function(d){
         return scaleX(d.val) + "%";
       })
-      .attr("height", style.barsA.height)
-      .attr("x", style.barsA.left + "%")
+      .attr("height", style.height)
+      .attr("x", style.left + "%")
       .attr("y", function(d, i){
-        return (i * (style.barsA.height + style.barsA.margin)) + style.barsA.margin;
+        return (i * (style.height + style.margin)) + style.margin;
       })
       .attr("fill", function(d){
         return d.color;
       })
       .on("mouseover", function(d){
-        console.log(d);
-        /*
-          var content = [];
+        
+          var content = [],
+              st      = d.timestamp.split(" ")[1].split(":");
           content.push("<span>partido:</span>" + d.party);
-          content.push("<span>punto estimado:</span>" + d.value);
-          content.push("<span>hora:</span>" + d.timeLabel);
+          content.push("<span>punto estimado:</span>" + d.val);
+          content.push("<span>límite inferior:</span>" + d.limite_inf);
+          content.push("<span>límite superior:</span>" + d.limite_sup);
+          content.push("<span>hora:</span>" + st[0] + ":" + st[1]);
           _showTooltip(d.title, content.join("<br>"));
-          */
+          
       })
       .on("mouseout", function(d){
-          //_removeTooltip();
+          _removeTooltip();
       });
 
     d.exit().remove();
@@ -136,7 +155,7 @@
   var makeVerticalGuides = function(){
     this.verticalGuides = this.svg.selectAll(".verticalGuide");
     var points = scaleX.ticks();
-    var height = this.data.length * (style.barsA.height + (style.barsA.margin * 1.1));
+    var height = this.data.length * (style.height + (style.margin * 1.1));
     var d = this.verticalGuides.data(points);
     d.enter()
       .append("line")
@@ -144,10 +163,10 @@
       .attr("stroke", "grey")
       .attr("stroke-width", 1)
       .attr("x1", function(d){
-        return (style.barsA.left + scaleX(d)) + "%";
+        return (style.left + scaleX(d)) + "%";
       })
       .attr("x2", function(d){
-        return (style.barsA.left + scaleX(d)) + "%";
+        return (style.left + scaleX(d)) + "%";
       })
       .attr("y1", "0")
       .attr("y2", height);
@@ -158,7 +177,7 @@
     d.enter()
       .append("text")
         .attr("x", function(d){
-          return (style.barsA.left + scaleX(d)) + "%";
+          return (style.left + scaleX(d)) + "%";
         })
         .attr("y", height + 10)
         .attr("class", "verticalGuideLabel")
@@ -183,11 +202,11 @@
     
     d.enter()
       .append("text")
-        .attr("x", style.barsA.labelSize)
+        .attr("x", style.labelSize)
         .attr("y", function(d, i){
-          return (i * (style.barsA.height + style.barsA.margin)) + (style.barsA.height/2) + style.barsA.margin;
+          return (i * (style.height + style.margin)) + (style.height/2) + style.margin;
         })
-        .attr("class", style.barsA.labelClass)
+        .attr("class", style.labelClass)
         .attr("text-anchor", "end")
         .attr("alignment-baseline", "middle")
         .text(function(d){
@@ -207,9 +226,9 @@
     
     d.enter()
       .append("text")
-        .attr("x", style.barsA.xlabel + "%")
+        .attr("x", style.xlabel + "%")
         .attr("y", function(d, i){
-          return (i * (style.barsA.height + style.barsA.margin)) + (style.barsA.height/2) + style.barsA.margin;
+          return (i * (style.height + style.margin)) + (style.height/2) + style.margin;
         })
         .attr("class", "labelb")
         .attr("text-anchor", "start")
@@ -231,7 +250,7 @@
 
     d.transition()
       .attr("x", function(d){
-        return scaleX(d.val) + style.barsA.left + style.barsA.right + "%";
+        return scaleX(d.val) + style.left + style.right + "%";
       })
       .text(function(d){
         return d.val;
@@ -240,10 +259,10 @@
     d.enter()
       .append("text")
         .attr("x", function(d){
-          return scaleX(d.val) + style.barsA.left + style.barsA.right + "%";
+          return scaleX(d.val) + style.left + style.right + "%";
         })
         .attr("y", function(d, i){
-          return (i * (style.barsA.height + style.barsA.margin)) + (style.barsA.height/2) + style.barsA.margin;
+          return (i * (style.height + style.margin)) + (style.height/2) + style.margin;
         })
         .attr("class", "value")
         .attr("text-anchor", "start")
@@ -263,12 +282,18 @@
     if(d.result){
       var response = d.result.map(function(item){
         return {
-          id    : "mx" + item.id_resultado,
-          party : item.etiqueta,
-          val   : +item.punto_estimado,
-          color : item.color, 
-          stamp : item.descripcion,
-          pos   : item.orden
+          id         : "mx" + item.id_resultado,
+          party      : item.etiqueta,
+          val        : +item.punto_estimado,
+          color      : item.color, 
+          stamp      : item.descripcion,
+          pos        : item.orden,
+          estimador  : item.estimador,
+          estrato    : item.estrato,
+          limite_inf : item.limite_inferior,
+          limite_sup : item.limite_superior,
+          title      : item.titulo,
+          timestamp  : item.timestamp
         }
       });
       response.sort(function(a,b){
@@ -317,7 +342,7 @@
   // [ THE PLUGIN CONSTRUCTOR ]
   //
   // 
-  var _constructor = function(el, url){
+  var _constructor = function(el, url, obj){
     // [1] define the object
     var bars = {
       el           : el,
@@ -332,7 +357,9 @@
       cleanData    : cleanData,
       makeVerticalGuides : makeVerticalGuides,
       initialize   : function(){
-        var that = this;
+        var that   = this;
+        style      = Object.create(_mergeObject(style, (obj || {})));
+        
         d3.json(url, function(error, d){
           // prepare the response
           var _data = that.cleanData(d);
