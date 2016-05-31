@@ -20,7 +20,35 @@
       bottom : 20,
       left   : 30
     },
-    tickSize : 6
+    tickSize : 6,
+    tooltip : "gf-tt-cont"
+  },
+
+  _showTooltip = function(title, content){
+    var _container = document.createElement("div"),
+        _title     = document.createElement("h3"),
+        _content   = document.createElement("p");
+
+
+    _content.innerHTML   = content;
+    _title.innerHTML     = title;
+    _container.className = style.tooltip;
+
+    _container.style.position = "absolute";
+    _container.style.left = d3.event.pageX + "px";
+    _container.style.top  = d3.event.pageY + "px";
+
+    _container.appendChild(_title);
+    _container.appendChild(_content);
+
+    document.querySelector("body").appendChild(_container);
+  },
+
+  _removeTooltip = function(){
+    var tooltips = document.querySelectorAll("." + style.tooltip);
+    for(var i = 0; i<tooltips.length; i++){
+      tooltips[i].parentNode.removeChild(tooltips[i]);
+    }
   },
 
   _uniq = function(coll){
@@ -158,7 +186,17 @@
         .attr("y", function(d){
           return that.yScale(d.value);
         })
-        .attr("transform", "translate(" + (-style.tickSize/2) + ", " + (-style.tickSize/2) + ")");
+        .attr("transform", "translate(" + (-style.tickSize/2) + ", " + (-style.tickSize/2) + ")")
+        .on("mouseover", function(d){
+          var content = [];
+          content.push("<span>partido:</span>" + d.party);
+          content.push("<span>punto estimado:</span>" + d.value);
+          content.push("<span>hora:</span>" + d.timeLabel);
+          _showTooltip(d.title, content.join("<br>"));
+        })
+        .on("mouseout", function(d){
+          _removeTooltip();
+        });
 
     ticks.exit().remove();
   },
@@ -178,16 +216,12 @@
 
   drawLines = function(){
     var that    = this,
-        _labels = [],
         lines   = [],
         _lines  = [],
         labels  = this.data.map(function(d){
           return d.party;
-        });
-
-    for(var i = 0; i < labels.length; i++){
-          if(_labels.indexOf(labels[i]) == -1) _labels.push(labels[i]);
-    }
+        }),
+        _labels = _uniq(labels);
 
     _labels.forEach(function(label){
           lines.push(this.data.filter(function(d){
@@ -270,11 +304,13 @@
                 values  = collection.values,
                 objects = values.map(function(obj){
                   return {
-                    party : obj.etiqueta,
-                    value : obj.punto_estimado,
-                    color : obj.color,
-                    time  : _make_time(stamp),
-                    _time : stamp
+                    party   : obj.etiqueta,
+                    value   : obj.punto_estimado,
+                    color   : obj.color,
+                    time    : _make_time(stamp),
+                    _time   : stamp,
+                    project : obj.proyecto,
+                    title   : obj.titulo
                   };
                 });
             return objects;

@@ -27,11 +27,38 @@
           xlabel     : 75, // the position of the right text, in %
           labelSize  : "10em", // the space for the labels
           labelClass : "label" // the class for the party names
-        }
+        },
+        tooltip : "gf-tt-cont" // the class for the tooltip
       },
       // the scale for the bar width
       scaleX = d3.scale.linear().domain([0, 100]).range([style.barsA.min, style.barsA.width]);
 
+  var _showTooltip = function(title, content){
+    var _container = document.createElement("div"),
+        _title     = document.createElement("h3"),
+        _content   = document.createElement("p");
+
+
+    _content.innerHTML   = content;
+    _title.innerHTML     = title;
+    _container.className = style.tooltip;
+
+    _container.style.position = "absolute";
+    _container.style.left = d3.event.pageX + "px";
+    _container.style.top  = d3.event.pageY + "px";
+
+    _container.appendChild(_title);
+    _container.appendChild(_content);
+
+    document.querySelector("body").appendChild(_container);
+  };
+
+  var _removeTooltip = function(){
+    var tooltips = document.querySelectorAll("." + style.tooltip);
+    for(var i = 0; i<tooltips.length; i++){
+      tooltips[i].parentNode.removeChild(tooltips[i]);
+    }
+  };
   //
   // [ CREATE THE SVG ELEMENT ]
   //
@@ -84,6 +111,19 @@
       })
       .attr("fill", function(d){
         return d.color;
+      })
+      .on("mouseover", function(d){
+        console.log(d);
+        /*
+          var content = [];
+          content.push("<span>partido:</span>" + d.party);
+          content.push("<span>punto estimado:</span>" + d.value);
+          content.push("<span>hora:</span>" + d.timeLabel);
+          _showTooltip(d.title, content.join("<br>"));
+          */
+      })
+      .on("mouseout", function(d){
+          //_removeTooltip();
       });
 
     d.exit().remove();

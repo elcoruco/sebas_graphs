@@ -1,0 +1,25 @@
+div.gf-tt-cont{
+    background: white;
+    font-family: sans-serif;
+    padding:1em;
+    margin-top:-6em;
+    margin-left:2em;
+}
+
+div.gf-tt-cont h3{
+    text-align:center;
+    border-bottom: 1px solid grey;
+    padding-bottom:.5em;
+}
+
+div.gf-tt-cont p{
+}
+
+div.gf-tt-cont span{
+    display: inline-block;
+    color:grey;
+    padding-bottom:.2em;
+    width:8em;
+}
+
+
