@@ -146,8 +146,8 @@
     ticks.enter()
       .append("rect")
         .attr("class", "line-point")
-        .attr("width", 4)
-        .attr("height", 4)
+        .attr("width", 7)
+        .attr("height", 6)
         .attr("fill", function(d){
           return d.color;
         })
