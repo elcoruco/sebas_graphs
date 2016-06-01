@@ -1,0 +1,77 @@
+/*
+ * [ the tooltip ]
+ * --------------------------------------------------------------------------------
+ */
+
+/* este es el contenedor del tooltip */
+div.gf-tt-cont{ 
+    background: white;
+    font-family: sans-serif;
+    padding:1em;
+    position: absolute;
+    margin-top:-6em;
+    margin-left:2em;
+
+}
+
+div.gf-tt-cont h3{
+    text-align:center;
+    border-bottom: 1px solid grey;
+    padding-bottom:.5em;
+}
+
+div.gf-tt-cont p{
+}
+
+div.gf-tt-cont span{
+    display: inline-block;
+    color:grey;
+    padding-bottom:.2em;
+    width:8em;
+}
+
+/*
+ * [ the bars2 graph ]
+ * --------------------------------------------------------------------------------
+ */
+line.verticalGuide{
+    stroke       : #ddd;
+    stroke-width : 1;
+}
+
+text.verticalGuideLabel{
+    text-anchor        : middle;
+    alignment-baseline : middle;
+    font-family        : sans-serif;
+    stroke             : #ddd;
+}
+
+/*
+ * [ the line graph ]
+ * --------------------------------------------------------------------------------
+ */
+path.line{
+    fill : none;
+    stroke: black; /* the default color */
+}
+  .y-axis path{
+    display: none;
+  }
+
+  .y-axis line {
+    fill: none;
+    stroke: #ddd;
+    shape-rendering: crispEdges;
+  }
+
+  .y-axis text, .x-axis-label {
+    font-family: sans-serif;
+    font-size: 11px;
+  }
+
+  .x-axis-label{
+    text-anchor : middle;
+    fill : black;
+  }
+
+

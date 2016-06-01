@@ -1,26 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Graphs example</title>
+  <link rel="stylesheet" type="text/css" href="gf-graphs-style.css">
   <style>
   .bars, .lines{
-    width: 40em;
-  }
-
-  /* THIS STYLES ARE PART OF THE LINES GRAPH; AND THEY MUST BE IMPLEMENTED THERE, BUT... */
-  .y-axis path{
-    display: none;
-  }
-
-  .y-axis line {
-    fill: none;
-    stroke: #ddd;
-    shape-rendering: crispEdges;
-  }
-
-  .y-axis text, .x-axis-label {
-    font-family: sans-serif;
-    font-size: 11px;
+    width: 50%;
   }
   </style>
 </head>
@@ -56,11 +41,13 @@
 <!-- the example -->
 <script>
   var buttonA = document.getElementById("data-a"),
-  buttonB = document.getElementById("data-b"),
-  div     = document.querySelectorAll(".bars")[0],
-  _div     = document.querySelectorAll(".bars")[1],
-  graph  = new GFBars2(div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP");
-  _graph = new GFBars2(_div, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/06_ESTATAL%20GOBERNADOR/Total/EP"); 
+      buttonB = document.getElementById("data-b"),
+      div     = document.querySelectorAll(".bars")[0],
+      _div    = document.querySelectorAll(".bars")[1],
+      url1    = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP";
+      url2    = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/06_ESTATAL%20GOBERNADOR/Total/EP";
+      graph   = new GFBars2(div, url1, {"height" : 50});
+      _graph  = new GFBars2(_div, url2); 
 
   buttonB.addEventListener("click", function(e){
     e.preventDefault();
@@ -77,37 +64,38 @@
 <script src="gf-lines.js"></script>
 <!-- THE second example -->
 <script>
-  buttonC = document.getElementById("time-0"),
-  buttonD = document.getElementById("time-1"),
-  buttonE = document.getElementById("time-2"),
-  buttonF = document.getElementById("time-3"),
-  buttonG = document.getElementById("time-4"),
-  div2    = document.querySelectorAll(".lines")[0],
-  graph2  = new GFLines(div2, "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP"); 
+  var buttonC = document.getElementById("time-0"),
+      buttonD = document.getElementById("time-1"),
+      buttonE = document.getElementById("time-2"),
+      buttonF = document.getElementById("time-3"),
+      buttonG = document.getElementById("time-4"),
+      div2    = document.querySelectorAll(".lines")[0],
+      url3 = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP",
+      graph2  = new GFLines(div2, url3, {tickSize : 12}); 
 
   buttonC.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
+    graph2.update(url3);
   });
 
   buttonD.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
+    graph2.update(url3);
   });
 
   buttonE.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
+    graph2.update(url3);
   });
 
   buttonF.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
+    graph2.update(url3);
   });
 
   buttonG.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update("http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP");
+    graph2.update(url3);
   });
 </script>
 </body>
