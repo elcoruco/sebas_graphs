@@ -26,10 +26,8 @@
 <ul>
   <li><a id="time-0" href="#">inicio</a></li>
   <li><a id="time-1" href="#">corte 1</a></li>
-  <li><a id="time-2" href="#">corte 2</a></li>
-  <li><a id="time-3" href="#">corte 3</a></li>
-  <li><a id="time-4" href="#">corte 4</a></li>
 </ul>
+<div class="lines"></div>
 <div class="lines"></div>
 
 <!-- d3, a damn hard dependency -->
@@ -62,16 +60,20 @@
 
 <!-- the crappy plugin 2 -->
 <script src="gf-lines.js"></script>
+<script src="gf-lines-2.js"></script>
 <!-- THE second example -->
 <script>
   var buttonC = document.getElementById("time-0"),
       buttonD = document.getElementById("time-1"),
-      buttonE = document.getElementById("time-2"),
-      buttonF = document.getElementById("time-3"),
-      buttonG = document.getElementById("time-4"),
       div2    = document.querySelectorAll(".lines")[0],
+      div3    = document.querySelectorAll(".lines")[1],
       url3 = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP",
       graph2  = new GFLines(div2, url3, {tickSize : 12}); 
+      _graph2  = new GFLines2(div3, url3, {
+        tickSize   : 6,
+        minSteps   : 8,
+        useSeconds : false
+      }); 
 
   buttonC.addEventListener("click", function(e){
     e.preventDefault();
@@ -79,21 +81,6 @@
   });
 
   buttonD.addEventListener("click", function(e){
-    e.preventDefault();
-    graph2.update(url3);
-  });
-
-  buttonE.addEventListener("click", function(e){
-    e.preventDefault();
-    graph2.update(url3);
-  });
-
-  buttonF.addEventListener("click", function(e){
-    e.preventDefault();
-    graph2.update(url3);
-  });
-
-  buttonG.addEventListener("click", function(e){
     e.preventDefault();
     graph2.update(url3);
   });

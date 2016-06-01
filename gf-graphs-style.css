@@ -52,7 +52,7 @@ text.verticalGuideLabel{
  */
 path.line{
     fill : none;
-    stroke: black; /* the default color */
+    /*stroke: black;  the default color */
 }
   .y-axis path{
     display: none;
