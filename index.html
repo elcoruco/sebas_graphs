@@ -44,7 +44,7 @@
       _div    = document.querySelectorAll(".bars")[1],
       url1    = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/NACIONAL%20DIPUTADO/Total/EP";
       url2    = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosGenerales/06_ESTATAL%20GOBERNADOR/Total/EP";
-      graph   = new GFBars2(div, url1, {"height" : 50, isClient: true});
+      graph   = new GFBars2(div, url1, {"height" : 50, isClient: true, showVerticalGuides : true});
       _graph  = new GFBars2(_div, url2); 
 
   buttonB.addEventListener("click", function(e){
