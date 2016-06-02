@@ -18,6 +18,7 @@
   //
   var style =  {
         dataDomain : [0, 100],
+        isClient   : false,
         height     : 30, // the height of the bar in px
         margin     : 15, // the top and bottom bar margin
         left       : 27, // the left margin, in %
@@ -138,9 +139,11 @@
               st      = d.timestamp.split(" ")[1].split(":");
           content.push("<span>partido:</span>" + d.party);
           content.push("<span>punto estimado:</span>" + d.val);
-          content.push("<span>límite inferior:</span>" + d.limite_inf);
-          content.push("<span>límite superior:</span>" + d.limite_sup);
-          content.push("<span>hora:</span>" + st[0] + ":" + st[1]);
+          if(!style.isClient){
+            content.push("<span>límite inferior:</span>" + d.limite_inf);
+            content.push("<span>límite superior:</span>" + d.limite_sup);
+            content.push("<span>hora:</span>" + st[0] + ":" + st[1]);
+          }
           _showTooltip(d.title, content.join("<br>"));
           
       })

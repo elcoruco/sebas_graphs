@@ -17,7 +17,8 @@
   //
   //
   var style =  {
-        barsA : {
+        isClient : false,
+        barsA    : {
           height : 30, // the height of the bar in px
           margin : 15, // the top and bottom bar margin
           left   : 27, // the left margin, in %

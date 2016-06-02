@@ -13,6 +13,7 @@
   //
   //
   var style = {
+    isClient      : false,
     defaultHeight : 300, // la altura de la gráfica, en pixeles
     maxValue      : 70, // el máximo de porcentaje de la eleccion
     minValue      : 0, // el mínimo porcentaje de la elección
@@ -258,7 +259,9 @@
           var content = [];
           content.push("<span>partido:</span>" + d.party);
           content.push("<span>punto estimado:</span>" + d.value);
-          content.push("<span>hora:</span>" + d.timeLabel);
+          if(!style.isClient){
+            content.push("<span>hora:</span>" + d.timeLabel);
+          }           
           _showTooltip(d.title, content.join("<br>"));
         })
         .on("mouseout", function(d){
