@@ -47,7 +47,8 @@ text.verticalGuideLabel{
     text-anchor        : middle;
     alignment-baseline : middle;
     font-family        : sans-serif;
-    stroke             : #ddd;
+    fill               : #ddd;
+    stroke             : none;
 }
 
 /*

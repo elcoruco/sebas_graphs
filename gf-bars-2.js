@@ -18,6 +18,8 @@
   //
   var style =  {
         dataDomain : [0, 100],
+        dataMargin : 10,
+        verticalGuidesTicks : 5,
         isClient   : false,
         height     : 30, // the height of the bar in px
         margin     : 15, // the top and bottom bar margin
@@ -33,7 +35,7 @@
         verticalGuideLabelClass : "verticalGuideLabel" // la clase de las tiquetas de las guías verticales
       },
       // the scale for the bar width
-      scaleX = d3.scale.linear().domain(style.dataDomain).range([style.min, style.width]);
+      scaleX = null;//d3.scale.linear().domain(style.dataDomain).range([style.min, style.width]);
 
   // el código de _mergeObject es de:
   // http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
@@ -79,6 +81,13 @@
     for(var i = 0; i<tooltips.length; i++){
       tooltips[i].parentNode.removeChild(tooltips[i]);
     }
+  };
+
+  var _setScaleX = function(data){
+    var max = d3.max(data, function(v){
+      return v.val;
+    });
+    scaleX = d3.scale.linear().domain([0, max+style.dataMargin]/*style.dataDomain*/).range([style.min, style.width]);
   };
   //
   // [ CREATE THE SVG ELEMENT ]
@@ -160,9 +169,19 @@
   //
   var makeVerticalGuides = function(){
     this.verticalGuides = this.svg.selectAll("." +  style.verticalGuideClass);
-    var points = scaleX.ticks();
+    var points = scaleX.ticks(style.verticalGuidesTicks);
     var height = this.data.length * (style.height + (style.margin * 1.1));
     var d = this.verticalGuides.data(points);
+    
+    d.transition().attr("x1", function(d){
+        return (style.left + scaleX(d)) + "%";
+      })
+      .attr("x2", function(d){
+        return (style.left + scaleX(d)) + "%";
+      })
+      .attr("y1", "0")
+      .attr("y2", height);
+
     d.enter()
       .append("line")
       .attr("class", style.verticalGuideClass)
@@ -177,8 +196,19 @@
       .attr("y1", "0")
       .attr("y2", height);
 
+    d.exit().remove();
+
     this.verticalGuidesLabels = this.svg.selectAll("." + style.verticalGuideLabelClass);
     var d = this.verticalGuidesLabels.data(points);
+
+    d.transition().attr("x", function(d){
+          return (style.left + scaleX(d)) + "%";
+        })
+        .attr("y", height + 10)
+        .attr("class", style.verticalGuideLabelClass)
+        .text(function(d){
+          return d;
+        });
 
     d.enter()
       .append("text")
@@ -192,6 +222,8 @@
         .text(function(d){
           return d;
         });
+
+    d.exit().remove();
   };
 
   //
@@ -321,6 +353,7 @@
     // si recibe los datos listos para usarse
     if(Array.isArray(data)){
       this.data = data;
+      _setScaleX(this.data);
       this.makeVerticalGuides();
       this.makeRects();
       this.addLabels();
@@ -334,6 +367,7 @@
       d3.json(data, function(error, d){
         var _data = that.cleanData(d);
         that.data = _data;
+        _setScaleX(that.data);
         that.makeVerticalGuides();
         that.makeRects();
         that.addLabels();
