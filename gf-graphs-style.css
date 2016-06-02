@@ -30,6 +30,10 @@ div.gf-tt-cont span{
     width:8em;
 }
 
+div.gf-tt-cont span:first-letter{
+  text-transform: capitalize;
+}
+
 /*
  * [ the bars2 graph ]
  * --------------------------------------------------------------------------------
