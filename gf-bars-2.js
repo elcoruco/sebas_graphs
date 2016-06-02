@@ -101,7 +101,7 @@
   //
   //
   var setSVGHeight = function(){
-    this.svg.attr("height", this.data.length * (style.height + (style.margin * 2)) );
+    this.svg.attr("height", this.data.length * (style.height + (style.margin * 1.3)) );
   };
 
   //
