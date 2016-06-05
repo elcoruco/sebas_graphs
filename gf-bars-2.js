@@ -20,6 +20,7 @@
         dataDomain : [0, 100],
         dataMargin : 10,
         verticalGuidesTicks : 5,
+        showVerticalGuides : false,
         isClient   : false,
         height     : 30, // the height of the bar in px
         margin     : 15, // the top and bottom bar margin
@@ -354,7 +355,9 @@
     if(Array.isArray(data)){
       this.data = data;
       _setScaleX(this.data);
-      this.makeVerticalGuides();
+      if(style.showVerticalGuides){
+        this.makeVerticalGuides();
+      }
       this.makeRects();
       this.addLabels();
       this.setSVGHeight();
@@ -368,7 +371,9 @@
         var _data = that.cleanData(d);
         that.data = _data;
         _setScaleX(that.data);
-        that.makeVerticalGuides();
+        if(style.showVerticalGuides){
+           that.makeVerticalGuides();
+        }
         that.makeRects();
         that.addLabels();
         that.setSVGHeight();
