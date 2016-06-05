@@ -16,6 +16,7 @@
     isClient      : false,
     defaultHeight : 300, // la altura de la gráfica, en pixeles
     maxValue      : 70, // el máximo de porcentaje de la eleccion
+    dataMargin    : 10, // lo que se le agrega al máximo de valores para la escala Y
     minValue      : 0, // el mínimo porcentaje de la elección
     firstHour     : 8, // la hora en la que empiezan las encuestas
     lastHour      : 20, // la hora en la que terminan las encuestas
@@ -136,8 +137,12 @@
   //
   //
   makeYScale = function(){
+    var max = d3.max(this.data, function(d){
+      return +d.value;
+    }) + style.dataMargin;
+
     var y = d3.scale.linear()
-              .domain([style.minValue, style.maxValue])
+              .domain([style.minValue, max])
               .range([style.defaultHeight - style.margins.bottom, style.margins.top ]);
     this.yScale = y;
   },
@@ -241,20 +246,20 @@
     });
 
     ticks.enter()
-      .append("rect")
+      .append("circle")
         .attr("class", "line-point")
-        .attr("width", style.tickSize)
-        .attr("height", style.tickSize)
+        //.attr("width", style.tickSize)
+        .attr("r", style.tickSize)
         .attr("fill", function(d){
           return d.color;
         })
-        .attr("x", function(d){
+        .attr("cx", function(d){
           return that.xScale(d.timeLabel) + "%";
         })
-        .attr("y", function(d){
+        .attr("cy", function(d){
           return that.yScale(d.value);
         })
-        .attr("transform", "translate(" + (-style.tickSize/2) + ", " + (-style.tickSize/2) + ")")
+        //.attr("transform", "translate(" + (-style.tickSize/2) + ", " + (-style.tickSize/2) + ")")
         .on("mouseover", function(d){
           var content = [];
           content.push("<span>partido:</span>" + d.party);
