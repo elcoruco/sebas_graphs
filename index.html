@@ -67,12 +67,14 @@
       buttonD = document.getElementById("time-1"),
       div2    = document.querySelectorAll(".lines")[0],
       div3    = document.querySelectorAll(".lines")[1],
-      url3 = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/06_ESTATAL%20GOBERNADOR/Total/EP",
-      
+      url3 = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/10_DGO/Total/CR",
+      url4 = "http://107.170.223.32/ExitPollsBL/index.php/resultados/resultadosReporteGeneralPuntos/10_DGO/Total/EP";
+      /*
       graph2  = new GFLines(div2, url3, {
         tickSize : 12,
         isClient : true
       }); 
+      */
       
       _graph2  = new GFLines2(div3, url3, {
         tickSize   : 6,
@@ -82,12 +84,12 @@
 
   buttonC.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(url3);
+    _graph2.update(url3);
   });
 
   buttonD.addEventListener("click", function(e){
     e.preventDefault();
-    graph2.update(url3);
+    _graph2.update(url4);
   });
 </script>
 </body>

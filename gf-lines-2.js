@@ -238,10 +238,10 @@
     var that  = this,
         ticks = this.svg.selectAll(".line-point").data(this.data);
 
-    ticks.transition().attr("x", function(d){
+    ticks.transition().attr("cx", function(d){
       return that.xScale(d.timeLabel) + "%";
     })
-    .attr("y", function(d){
+    .attr("cy", function(d){
       return that.yScale(d.value);
     });
 
@@ -266,6 +266,8 @@
           content.push("<span>punto estimado:</span>" + d.value);
           if(!style.isClient){
             content.push("<span>hora:</span>" + d.timeLabel);
+            content.push("<span>límite inferior:</span>" + d.lim_inf);
+            content.push("<span>límite superior:</span>" + d.lim_sup);
           }           
           _showTooltip(d.title, content.join("<br>"));
         })
@@ -401,7 +403,9 @@
                     time    : _make_time(stamp),
                     _time   : stamp,
                     project : obj.proyecto,
-                    title   : obj.titulo
+                    title   : obj.titulo,
+                    lim_inf : obj.limite_inferior,
+                    lim_sup : obj.limite_superior
                   };
                 });
             return objects;
